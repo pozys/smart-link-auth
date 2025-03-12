@@ -23,7 +23,7 @@ jobs:
       - name: Install PHP Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: set JWT_SECRET
-        run: php artisan jwt:secret
+        run: php artisan jwt:secret -f
       - name: run coverage analysis
         uses: paambaati/codeclimate-action@v9.0.0
         env:
