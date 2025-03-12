@@ -41,21 +41,11 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    public function me(): JsonResponse
-    {
-        return response()->json(Auth::user());
-    }
-
     public function logout(): JsonResponse
     {
         Auth::logout();
 
         return response()->json(['message' => 'Successfully logged out']);
-    }
-
-    public function refresh(): JsonResponse
-    {
-        return $this->respondWithToken(Auth::refresh());
     }
 
     public function verifyToken(): JsonResponse
