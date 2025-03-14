@@ -16,8 +16,6 @@ Route::middleware('api',)->group(static function () {
     Route::prefix('auth')->group(function () {
         Route::controller(AuthController::class)->group(static function () {
             Route::post('logout', 'logout');
-            Route::post('refresh', 'refresh');
-            Route::get('me', 'me');
             Route::post('verify-token', 'verifyToken');
         });
     });
