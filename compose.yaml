@@ -1,0 +1,51 @@
+services:
+  application:
+    container_name: smart-link-auth-app
+    build:
+      context: .
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    depends_on:
+      - database
+    networks:
+      - common_network
+
+  webserver:
+    image: nginx
+    container_name: smart-link-auth-webserver
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - ./external/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - application
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f localhost:80/up || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - common_network
+
+  database:
+    image: postgres
+    container_name: smart-link-auth-database
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      - smart_link_auth_pgdata:/var/lib/postgresql/data
+    networks:
+      - common_network
+
+volumes:
+  smart_link_auth_pgdata:
+
+networks:
+  common_network:
+    external: true
